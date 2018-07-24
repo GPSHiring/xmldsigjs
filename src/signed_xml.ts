@@ -332,6 +332,17 @@ export class SignedXml implements XmlCore.IXmlSerializable {
                                 return false;
                             });
                         }
+                        if(this.XmlSignature.KeyInfo) {
+                            if(this.XmlSignature.KeyInfo.Id === objectName) {
+                                found =  findById(this.XmlSignature.KeyInfo.GetXml()!, objectName!);
+                                if (found) {
+                                    const el = found.cloneNode(true) as Element;
+                                    this.CopyNamespaces(found, el, false);
+                                    this.CopyNamespaces(doc, el, false);
+                                    doc = el;
+                                }
+                            }
+                        }
                         if (!found && doc) {
                             found = XmlCore.XmlObject.GetElementById(doc, objectName);
                             if (found) {
@@ -652,7 +663,7 @@ function _SelectRootNamespaces(node: Node, selectedNodes: XmlCore.AssocArray<str
         //#region Select all xmlns attrs
         for (let i = 0; i < el.attributes.length; i++) {
             const attr = el.attributes.item(i);
-            if (attr.prefix === "xmlns") {
+            if (attr && attr.prefix === "xmlns") {
                 addNamespace(selectedNodes, attr.localName ? attr.localName : "", attr.value);
             }
         }
