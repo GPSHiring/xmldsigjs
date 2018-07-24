@@ -1,5 +1,5 @@
 {
-  "name": "xmldsigjs",
+  "name": "xmldsigjs-keyinfo",
   "version": "2.0.21",
   "description": "XMLDSIGjs provides an implementation of XMLDSIG in Typescript/Javascript based on WebCrypto ",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PeculiarVentures/xadesjs.git"
+    "url": "git+https://github.com/GPSHiring/xmldsigjs.git"
   },
   "keywords": [
     "xml",
