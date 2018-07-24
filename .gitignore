@@ -11,3 +11,4 @@ test*.js
 
 # MacOS
 .DS_Store
+.idea
