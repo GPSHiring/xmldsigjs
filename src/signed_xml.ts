@@ -501,6 +501,22 @@ export class SignedXml implements XmlCore.IXmlSerializable {
     protected ApplySignOptions(signature: Signature, algorithm: Algorithm, key: CryptoKey, options: OptionsSign = {}): PromiseLike<void> {
         return Promise.resolve()
             .then(() => {
+                // x509
+                if (options.x509) {
+                    if (!signature.KeyInfo) {
+                        signature.KeyInfo = new KeyInfo();
+                    }
+                    const keyInfo = signature.KeyInfo;
+                    options.x509.forEach((x509) => {
+                        const raw = XmlCore.Convert.FromBase64(x509);
+                        const x509Data = new KeyInfoX509Data(raw);
+                        keyInfo.Add(x509Data);
+                    });
+                }
+                return Promise.resolve();
+
+            })
+            .then(() => {
                 // keyValue
                 if (options.keyValue && key.algorithm.name!.toUpperCase() !== Alg.HMAC) {
                     if (!signature.KeyInfo) {
@@ -515,21 +531,6 @@ export class SignedXml implements XmlCore.IXmlSerializable {
                 }
             })
             .then(() => {
-                // x509
-                if (options.x509) {
-                    if (!signature.KeyInfo) {
-                        signature.KeyInfo = new KeyInfo();
-                    }
-                    const keyInfo = signature.KeyInfo;
-                    options.x509.forEach((x509) => {
-                        const raw = XmlCore.Convert.FromBase64(x509);
-                        const x509Data = new KeyInfoX509Data(raw);
-                        keyInfo.Add(x509Data);
-                    });
-                }
-                return Promise.resolve();
-            })
-            .then(() => {
                 // references
                 if (options.references) {
                     options.references.forEach((item) => {
@@ -539,13 +540,10 @@ export class SignedXml implements XmlCore.IXmlSerializable {
                             reference.Id = item.id;
                         }
                         // Uri
-                        if (item.uri) {
-                            reference.Uri = item.uri;
-                        }
+                        reference.Uri = item.uri || "";
                         // Type
-                        if (item.type) {
-                            reference.Type = item.type;
-                        }
+                        reference.Type = item.type || "";
+
                         // DigestMethod
                         const digestAlgorithm = CryptoConfig.GetHashAlgorithm(item.hash);
                         reference.DigestMethod.Algorithm = digestAlgorithm.namespaceURI;

@@ -31,7 +31,7 @@ export class DataObject extends XmlSignatureObject {
 
     @XmlAttribute({
         localName: XmlSignature.AttributeNames.Id,
-        defaultValue: "",
+        defaultValue: "XadesObjectId-"+Date.now(),
     })
     public Id: string;
 

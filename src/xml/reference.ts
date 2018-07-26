@@ -38,15 +38,6 @@ export class Reference extends XmlSignatureObject {
     public Id: string;
 
     /**
-     * Gets or sets the Uri of the current Reference.
-     */
-    @XmlAttribute({
-        localName: XmlSignature.AttributeNames.URI,
-        defaultValue: "",
-    })
-    public Uri: string;
-
-    /**
      * Gets or sets the type of the object being signed.
      */
     @XmlAttribute({
@@ -54,6 +45,16 @@ export class Reference extends XmlSignatureObject {
         defaultValue: "",
     })
     public Type: string;
+
+    /**
+     * Gets or sets the Uri of the current Reference.
+     */
+    @XmlAttribute({
+        localName: XmlSignature.AttributeNames.URI,
+        defaultValue: "",
+        required: true,
+    })
+    public Uri: string;
 
     @XmlChildElement({
         parser: Transforms,
